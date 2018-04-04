@@ -1,12 +1,6 @@
 # Ambient Hue
 
-**Ambient Hue** is a real time average color synchronisation of your main screen and a [Philips Hue light](https://www2.meethue.com).
-
-It analyses your screen and sends the current color and brightness to a selected [Philips Hue lamp](https://www2.meethue.com) up to 10 times per second. You can configure the speed of the colour change and maximal brightness for your personal experience.
-
-# Sponsorship
-
-**Ambient Hue** is open source software. Ongoing development is made possible by generous contributions.
+**Ambient Hue** is a real time average color synchronisation of your main screen and a [Philips Hue light](https://www2.meethue.com). It analyses your screen and sends the current color and brightness to a selected [Philips Hue lamp](https://www2.meethue.com) up to 10 times per second. You can configure the speed of the colour change and maximal brightness for your personal experience.
 
 # Documentation
 
@@ -20,6 +14,10 @@ The first slider goes from 100 milliseconds to 2 seconds and represents the refr
 **Ambient Hue** currently supports HTTP Put requests, used to directly access your [Philips Hue Bridge](https://www2.meethue.com/en-us/p/hue-bridge/046677458478); see the official [Philips Hue API](https://www.developers.meethue.com) for further information. The HTTPS Post request is useful when accessing the bridge through a proxy (e.g., to access your lights from outside your local network).
 
 The full source code is available [here](https://github.com/lsonnino/ambient-hue/tree/master/AmbientHue/src/main/java) while the current release is available [here](https://github.com/lsonnino/ambient-hue/tree/master/release).
+
+# Sponsorship
+
+**Ambient Hue** is open source software. Ongoing development is made possible by generous contributions.
 
 # Credits
 
