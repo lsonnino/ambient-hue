@@ -14,24 +14,37 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 
+/**
+ * A window containing the properties
+ */
 public class PropertiesWindow extends Stage {
+    // Properties values
     private SimpleStringProperty httpURL, httpsURL;
     private SimpleBooleanProperty httpPost, httpsPost;
 
+    // GUI items
     private RadioButton httpRadioButton, httpsRadioButton;
 
+    // The action executed on stage's close
     private ActionIF onClose;
+    // The test status
     private int testStatus;
 
+    // The button's CSS
     public static final String PRESSED_STYLE = "-fx-background-color: rgb(0, 0, 0, 0.4);",
             NORMAL_STYLE = "-fx-background-color: rgb(0, 0, 0, 0.2);",
             FOUND_STYLE = "-fx-background-color: rgba(99,153,61,0.8);",
             ERROR_STYLE = "-fx-background-color: rgba(230,0,11,0.4);";
 
+    /**
+     * Constructor
+     * @param onClose the action executed on stage's close
+     */
     public PropertiesWindow(ActionIF onClose){
         super();
         this.onClose = onClose;
 
+        // Set the stage and the main environment
         VBox vBox = new VBox();
         vBox.setSpacing(10);
         Scene scene = new Scene(vBox, 460, 300);
@@ -42,13 +55,17 @@ public class PropertiesWindow extends Stage {
         setResizable(false);
 
 
+        // Get the properties
         httpURL = new SimpleStringProperty(Main.properties.getUrlHTTP());
         httpsURL = new SimpleStringProperty(Main.properties.getUrlHTTPS());
         httpPost = new SimpleBooleanProperty(Main.properties.isPostHTTP());
         httpsPost = new SimpleBooleanProperty(Main.properties.isPostHTTPS());
 
-
+        // Set the test status
         testStatus = 0;
+
+        // Main components
+            // RadioButtons and ToggleButtons
         ToggleGroup protocolToggleGroup = new ToggleGroup();
 
         httpRadioButton = new RadioButton("HTTP");
@@ -59,28 +76,40 @@ public class PropertiesWindow extends Stage {
         httpsRadioButton.setToggleGroup(protocolToggleGroup);
         httpsRadioButton.setSelected(!httpRadioButton.isSelected());
 
+            // Bottom buttons
+                // TEST BUTTON
         Button testButton = new Button("Test");
         testButton.prefWidthProperty().bind(scene.widthProperty());
         testButton.setOnAction(event -> {
             try {
+                // Save the current properties
                 Properties clone = new Properties(Main.properties);
 
+                // Save the new one
                 save();
 
+                // Test the lamp
+                    // Set it off
                 Utils.send(0, 0, 0);
                 Thread.sleep(500);
+                    // Set it on
                 Utils.send(0, 0, 100);
                 Thread.sleep(500);
+                    // Set it off
                 Utils.send(0, 0, 0);
+                // Get the test status: success
                 testStatus = 1;
 
                 Main.properties = new Properties(clone);
             }
             catch(InterruptedException exc){
+                // The Thread.sleep is done after changing the lamp status at least one time. So if this error occurs, the lamp works
+                // But still, do not update the testStatus to be sure
                 exc.printStackTrace();
             }
             catch(Exception exc){
                 exc.printStackTrace();
+                // Get the test status: failed
                 testStatus = -1;
             }
         });
@@ -88,6 +117,7 @@ public class PropertiesWindow extends Stage {
         testButton.setStyle(NORMAL_STYLE);
         testButton.setOnMousePressed(event -> testButton.setStyle(PRESSED_STYLE));
         testButton.setOnMouseReleased(event -> testButton.setStyle(testStatus == -1 ? ERROR_STYLE : FOUND_STYLE));
+                // SAVE BUTTON
         Button saveButton = new Button("Save");
         saveButton.prefWidthProperty().bind(scene.widthProperty().divide(2));
         saveButton.setStyle(NORMAL_STYLE);
@@ -98,6 +128,7 @@ public class PropertiesWindow extends Stage {
         );
         saveButton.setOnMouseReleased(event -> flash.play());
         saveButton.setOnAction(event -> save() );
+                // CANCEL BUTTON
         Button cancelButton = new Button("Cancel");
         cancelButton.prefWidthProperty().bind(scene.widthProperty().divide(2));
         cancelButton.setOnAction(event -> {
@@ -110,6 +141,7 @@ public class PropertiesWindow extends Stage {
         cancelButton.setOnMouseReleased(event -> cancelButton.setStyle(ERROR_STYLE));
         setOnCloseRequest(event -> onClose.run());
 
+            // Pack
         HBox buttonHBox = new HBox();
         buttonHBox.getChildren().addAll(cancelButton, saveButton);
 
@@ -126,10 +158,15 @@ public class PropertiesWindow extends Stage {
                 buttonHBox
         );
 
+        // Show the window
         show();
     }
 
+    /**
+     * Save the properties
+     */
     public void save() {
+        // Set the properties from the instance variables
         Main.properties.setHttps(
                 httpsRadioButton.isSelected()
         );
@@ -146,6 +183,7 @@ public class PropertiesWindow extends Stage {
                 httpPost.get()
         );
 
+        // Save the properties
         try {
             Serializer.serialize(Main.properties, Path.PROPERTIES.getParent(), Path.PROPERTIES.getName());
         } catch (IOException e) {
@@ -154,11 +192,20 @@ public class PropertiesWindow extends Stage {
 
     }
 
+    /**
+     * Get an HBox containing a textfield and some toggle buttons. The textfield is used to get an URL and
+     * the toggleButtons to chose the used request (POST and PUT, more coming soon)
+     * @param scene the scene
+     * @param https if this is the HTTPS part. If not, {https=false}
+     * @return the HBox
+     */
     private HBox getProtocolHBox(Scene scene, boolean https){
+        // TextField
         TextField urlTextField = new TextField( ( https ? Main.properties.getUrlHTTPS() : Main.properties.getUrlHTTP() ) );
         (https ? httpsURL : httpURL).bind(urlTextField.textProperty());
         urlTextField.prefWidthProperty().bind(scene.widthProperty().divide(3).multiply(2));
 
+        // ToggleButtons
         ToggleGroup requestGroup = new ToggleGroup();
 
         ToggleButton postToggleButton = new ToggleButton("Post");
@@ -171,6 +218,7 @@ public class PropertiesWindow extends Stage {
 
         (https ? httpsPost : httpPost).bind(postToggleButton.selectedProperty());
 
+        // Pack
         HBox hBox = new HBox();
         hBox.getChildren().addAll(
                 GUIUtils.getHSpacer(),
