@@ -1,0 +1,10 @@
+iconutil --convert icns AmbientHue.iconset
+mkdir -p package/macosx
+cp AmbientHue.icns package/macosx
+jdk=$(/usr/libexec/java_home)
+$jdk/bin/javapackager -version
+$jdk/bin/javapackager -deploy -native pkg -name AmbientHue \
+   -BappVersion=1.0.0 -Bicon=package/macosx/AmbientHue.icns \
+   -srcdir . -srcfiles AmbientHue.jar -appclass Main \
+   -outdir out -v
+cp out/AmbientHue-*.pkg ambient-hue-installer.pkg
