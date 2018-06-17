@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.awt.*;
 
@@ -52,6 +53,8 @@ public class Main extends Application {
         GUI gui = new GUI(extendedTimer);
 
         // Create the main window
+            // Set the application icon
+        primaryStage.getIcons().add(new Image(GUIUtils.getImage("ambient_hue")));
         primaryStage.setTitle(Constants.NAME); // Window's title
         primaryStage.setScene(new Scene(gui, 600, 300)); // Window's size and content
         primaryStage.setResizable(false); // The window can't be resized
