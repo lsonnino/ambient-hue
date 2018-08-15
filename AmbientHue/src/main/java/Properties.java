@@ -6,6 +6,8 @@ import java.io.Serializable;
 public class Properties implements Serializable {
     private String urlHTTP, urlHTTPS; // The url of a proxy server and the url of the hub
     private boolean https, postHTTP, postHTTPS; // The preferred way to access him
+    private String lamps;
+    public static final String LAMP_REPLACER = "{lamp}";
 
     /**
      * Main constructor of the class Properties
@@ -16,6 +18,7 @@ public class Properties implements Serializable {
         https = true;
         postHTTP = false;
         postHTTPS = true;
+        lamps = "";
     }
 
     /**
@@ -28,6 +31,7 @@ public class Properties implements Serializable {
         https = new Boolean(properties.isHttps());
         postHTTP = new Boolean(properties.isPostHTTP());
         postHTTPS = new Boolean(properties.isPostHTTPS());
+        this.lamps = new String(properties.getLamps());
     }
 
     /**
@@ -105,6 +109,16 @@ public class Properties implements Serializable {
      */
     public boolean isPostHTTPS() {
         return postHTTPS;
+    }
+
+    public void setLamps(String lamps) {
+        this.lamps = lamps;
+    }
+    public String getLamps() {
+        return lamps;
+    }
+    public boolean multipleLamps(){
+        return lamps != null && !lamps.equals("");
     }
 }
 

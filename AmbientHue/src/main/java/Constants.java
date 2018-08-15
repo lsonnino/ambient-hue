@@ -1,3 +1,4 @@
+
 /**
  * Contains all the basic constants of the program:
  *      NAME: the program's name
@@ -12,9 +13,11 @@
  */
 public class Constants {
     public static final String NAME = "Ambient Hue";
-    public static final String NAME_NO_SPACE = NAME.replaceAll("\\s", "-");
+    //public static final String NAME_NO_SPACE = NAME.replaceAll("\\s", "-");
+    public static final String NAME_NO_SPACE =
+            "" + Character.toLowerCase(NAME.charAt(0)) + NAME.replaceAll("\\s", "").substring(1);
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     public static final int MINOR = 0;
     public static final int PATCH = 0;
 }

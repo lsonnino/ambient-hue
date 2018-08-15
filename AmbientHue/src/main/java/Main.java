@@ -61,7 +61,6 @@ public class Main extends Application {
         // On window's close, stop all the threads and quit
         primaryStage.setOnCloseRequest(event -> {
             extendedTimer.stop();
-            System.exit(0);
         });
         // Show the window
         primaryStage.show();

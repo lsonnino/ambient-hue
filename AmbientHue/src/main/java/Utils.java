@@ -64,11 +64,36 @@ public class Utils {
 
         ensureParameters(parameters);
 
+        String url = "";
+
         if(Main.properties.isHttps()) {
-            HttpsRequestPoster.makePostRequest(Main.properties.getUrlHTTPS(), parameters);
+            url = Main.properties.getUrlHTTPS();
         }
         else {
-            HttpRequestPutter.makePutRequest(Main.properties.getUrlHTTP(), parameters);
+            url = Main.properties.getUrlHTTP();
+        }
+
+        String replacer = Properties.LAMP_REPLACER.replaceAll("\\{", "\\\\{").replaceAll("\\}", "\\\\}");
+
+        if(url.contains(Properties.LAMP_REPLACER) && Main.properties.multipleLamps()){
+            String[] index = Main.properties.getLamps().split(",");
+
+            for (String i: index) {
+                if(Main.properties.isHttps()) {
+                    HttpsRequestPoster.makePostRequest(url.replaceAll(replacer, i), parameters);
+                }
+                else {
+                    HttpRequestPutter.makePutRequest(url.replaceAll(replacer, i), parameters);
+                }
+            }
+        }
+        else {
+            if(Main.properties.isHttps()) {
+                HttpsRequestPoster.makePostRequest(url, parameters);
+            }
+            else {
+                HttpRequestPutter.makePutRequest(url, parameters);
+            }
         }
     }
 

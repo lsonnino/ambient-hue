@@ -79,7 +79,7 @@ public class PropertiesWindow extends Stage {
             // Bottom buttons
                 // TEST BUTTON
         Button testButton = new Button("Test");
-        testButton.prefWidthProperty().bind(scene.widthProperty());
+        testButton.prefWidthProperty().bind(scene.widthProperty().divide(2));
         testButton.setOnAction(event -> {
             try {
                 // Save the current properties
@@ -117,6 +117,16 @@ public class PropertiesWindow extends Stage {
         testButton.setStyle(NORMAL_STYLE);
         testButton.setOnMousePressed(event -> testButton.setStyle(PRESSED_STYLE));
         testButton.setOnMouseReleased(event -> testButton.setStyle(testStatus == -1 ? ERROR_STYLE : FOUND_STYLE));
+                // MULTIPLE LAMPS BUTTON
+        Button lampsButton = new Button("Lamps");
+        lampsButton.prefWidthProperty().bind(scene.widthProperty().divide(2));
+        lampsButton.setStyle(NORMAL_STYLE);
+        lampsButton.setOnMousePressed(event -> lampsButton.setStyle(PRESSED_STYLE));
+        lampsButton.setOnMouseReleased(event -> {
+            new LampsWindow();
+            lampsButton.setStyle(NORMAL_STYLE);
+        });
+        lampsButton.setOnAction(event -> save() );
                 // SAVE BUTTON
         Button saveButton = new Button("Save");
         saveButton.prefWidthProperty().bind(scene.widthProperty().divide(2));
@@ -142,8 +152,10 @@ public class PropertiesWindow extends Stage {
         setOnCloseRequest(event -> onClose.run());
 
             // Pack
-        HBox buttonHBox = new HBox();
-        buttonHBox.getChildren().addAll(cancelButton, saveButton);
+        HBox lampsHBox = new HBox();
+        lampsHBox.getChildren().addAll(testButton, lampsButton);
+        HBox exitHBox = new HBox();
+        exitHBox.getChildren().addAll(cancelButton, saveButton);
 
         vBox.getChildren().addAll(
                 httpRadioButton,
@@ -154,8 +166,8 @@ public class PropertiesWindow extends Stage {
                 getProtocolHBox(scene, true),
                 GUIUtils.vStrut(20),
 
-                testButton,
-                buttonHBox
+                lampsHBox,
+                exitHBox
         );
 
         // Show the window

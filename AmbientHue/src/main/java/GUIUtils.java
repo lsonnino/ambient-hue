@@ -1,3 +1,4 @@
+import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -60,5 +61,16 @@ public class GUIUtils {
         Region region = new Region();
         region.setPrefHeight(size);
         return region;
+    }
+
+    public static HBox hCenter(Node node){
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(getHSpacer(), node, getHSpacer());
+        return hBox;
+    }
+    public static VBox vCenter(Node node){
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(getVSpacer(), node, getVSpacer());
+        return vBox;
     }
 }
